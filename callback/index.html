@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>TikTok OAuth Callback</title></head>
+<body>
+<h1>認証完了</h1>
+<p>以下のコードをコピーしてターミナルに貼り付けてください:</p>
+<pre id="code"></pre>
+<script>
+const params = new URLSearchParams(window.location.search);
+const code = params.get('code');
+if (code) {
+  document.getElementById('code').textContent = code;
+} else {
+  document.getElementById('code').textContent = window.location.href;
+}
+</script>
+</body></html>
