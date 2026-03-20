@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ダッシュボード — Beautiful Future</title>
+<style>
+:root { --primary: #1a1a2e; --accent: #e94560; --accent2: #0f3460; --bg: #f4f5f7; --card: #fff; --text: #333; --muted: #777; --border: #e0e0e0; --radius: 12px; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+
+/* Header */
+.topbar { background: var(--primary); color: #fff; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.topbar h1 { font-size: 1.1rem; font-weight: 700; }
+.topbar .user-info { font-size: .85rem; opacity: .8; }
+
+/* Layout */
+.main { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.stat-card { background: var(--card); border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.stat-card .num { font-size: 1.8rem; font-weight: 800; color: var(--accent2); }
+.stat-card .label { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid var(--border); }
+.tab { padding: 12px 24px; font-size: .95rem; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; color: var(--muted); background: none; border-top: none; border-left: none; border-right: none; }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Panels */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Create form */
+.create-card { background: var(--card); border-radius: var(--radius); padding: 28px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.create-card h2 { font-size: 1.2rem; margin-bottom: 20px; color: var(--primary); }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: .95rem; font-family: inherit; background: #fafafa; transition: border-color .2s;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--accent2); background: #fff; }
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+/* Image upload area */
+.upload-area {
+  border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px; text-align: center;
+  color: var(--muted); cursor: pointer; transition: border-color .2s, background .2s;
+}
+.upload-area:hover { border-color: var(--accent2); background: #f0f4ff; }
+.upload-area .icon { font-size: 2rem; margin-bottom: 8px; }
+.upload-area input { display: none; }
+
+/* Image preview */
+.preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-top: 12px; }
+.preview-item { position: relative; aspect-ratio: 9/16; border-radius: 8px; overflow: hidden; background: #e8e8e8; }
+.preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.preview-item .remove { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; background: rgba(0,0,0,.6); color: #fff; border: none; border-radius: 50%; cursor: pointer; font-size: .7rem; display: flex; align-items: center; justify-content: center; }
+
+/* Hashtags */
+.tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.tag { background: #edf2ff; color: var(--accent2); padding: 4px 12px; border-radius: 20px; font-size: .85rem; }
+
+/* Privacy selector */
+.privacy-options { display: flex; gap: 12px; flex-wrap: wrap; }
+.privacy-opt { padding: 8px 18px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; font-size: .85rem; transition: all .2s; }
+.privacy-opt.selected { border-color: var(--accent2); background: #edf2ff; color: var(--accent2); font-weight: 600; }
+
+/* Buttons */
+.btn { display: inline-block; padding: 12px 32px; border-radius: 50px; border: none; cursor: pointer; font-size: .95rem; font-weight: 700; transition: transform .15s, box-shadow .15s; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233,69,96,.3); }
+.btn-secondary { background: var(--accent2); color: #fff; }
+.btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(15,52,96,.3); }
+.btn-group { display: flex; gap: 12px; margin-top: 24px; }
+
+/* Post history */
+.post-list { display: grid; gap: 16px; }
+.post-item { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04); display: flex; gap: 16px; align-items: center; }
+.post-thumb { width: 60px; height: 80px; border-radius: 8px; background: #e8e8e8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #bbb; font-size: .7rem; }
+.post-info { flex: 1; }
+.post-info h3 { font-size: .95rem; margin-bottom: 4px; }
+.post-info .meta { font-size: .8rem; color: var(--muted); }
+.post-stats { display: flex; gap: 16px; font-size: .8rem; color: var(--muted); }
+.post-stats span { white-space: nowrap; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 100; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: #fff; border-radius: 16px; padding: 40px; text-align: center; max-width: 420px; width: 90%; }
+.modal .check { width: 56px; height: 56px; border-radius: 50%; background: #28a745; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.modal .check svg { width: 28px; height: 28px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.modal h2 { font-size: 1.2rem; margin-bottom: 8px; }
+.modal p { font-size: .9rem; color: var(--muted); margin-bottom: 20px; }
+.modal .publish-id { font-family: monospace; font-size: .8rem; background: #f4f5f7; padding: 8px 16px; border-radius: 8px; color: var(--accent2); word-break: break-all; }
+
+/* Progress */
+.progress-bar { width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; margin: 16px 0; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width .5s ease; width: 0%; }
+#publishStatus { font-size: .85rem; color: var(--muted); min-height: 20px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>Beautiful Future</h1>
+  <span class="user-info">TikTok アカウント連携済み</span>
+</div>
+
+<div class="main">
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card"><div class="num">25</div><div class="label">投稿数</div></div>
+    <div class="stat-card"><div class="num">12</div><div class="label">フォロワー</div></div>
+    <div class="stat-card"><div class="num">300</div><div class="label">累計いいね</div></div>
+    <div class="stat-card"><div class="num">4,716</div><div class="label">最高再生数</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="create">コンテンツ作成</button>
+    <button class="tab" data-tab="history">投稿履歴</button>
+  </div>
+
+  <!-- Create Panel -->
+  <div class="panel active" id="panel-create">
+    <div class="create-card">
+      <h2>新しいカルーセルを作成</h2>
+
+      <div class="form-group">
+        <label>フォーマット</label>
+        <select id="format">
+          <option value="carousel" selected>カルーセル（写真モード）</option>
+          <option value="video">動画</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>タイトル（フック）</label>
+        <input type="text" id="title" placeholder="例: 保湿してるのにテカってた理由" maxlength="90">
+        <div style="text-align:right; font-size:.75rem; color:var(--muted); margin-top:4px;"><span id="titleCount">0</span>/90</div>
+      </div>
+
+      <div class="form-group">
+        <label>キャプション</label>
+        <textarea id="caption" placeholder="投稿の本文を入力..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>ハッシュタグ</label>
+        <input type="text" id="hashtags" placeholder="スペース区切りで入力 例: スキンケア メンズスキンケア">
+        <div class="tag-list" id="tagPreview"></div>
+      </div>
+
+      <div class="form-group">
+        <label>画像（最大35枚）</label>
+        <div class="upload-area" id="uploadArea">
+          <div class="icon">+</div>
+          <div>クリックまたはドラッグ&ドロップで画像を追加</div>
+          <input type="file" id="fileInput" accept="image/*" multiple>
+        </div>
+        <div class="preview-grid" id="previewGrid"></div>
+      </div>
+
+      <div class="form-group">
+        <label>公開範囲</label>
+        <div class="privacy-options">
+          <div class="privacy-opt selected" data-val="PUBLIC_TO_EVERYONE">全員に公開</div>
+          <div class="privacy-opt" data-val="MUTUAL_FOLLOW_FRIENDS">相互フォロー</div>
+          <div class="privacy-opt" data-val="FOLLOWER_OF_CREATOR">フォロワーのみ</div>
+          <div class="privacy-opt" data-val="SELF_ONLY">非公開</div>
+        </div>
+      </div>
+
+      <!-- Publish progress -->
+      <div id="publishProgress" style="display:none;">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div id="publishStatus"></div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" id="aiGenerateBtn">AI で自動生成</button>
+        <button class="btn btn-primary" id="publishBtn">TikTok に投稿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Panel -->
+  <div class="panel" id="panel-history">
+    <div class="post-list">
+      <div class="post-item">
+        <div class="post-thumb">9:16</div>
+        <div class="post-info">
+          <h3>毛穴が悪化する4つの習慣</h3>
+          <div class="meta">2026/03/09 — カルーセル 6枚</div>
+        </div>
+        <div class="post-stats">
+          <span>4,716 再生</span>
+          <span>43 いいね</span>
+          <span>13 保存</span>
+        </div>
+      </div>
+      <div class="post-item">
+        <div class="post-thumb">9:16</div>
+        <div class="post-info">
+          <h3>昼テカリと戦ってた頃の話</h3>
+          <div class="meta">2026/03/11 — カルーセル 6枚</div>
+        </div>
+        <div class="post-stats">
+          <span>1,302 再生</span>
+          <span>15 いいね</span>
+          <span>6 保存</span>
+        </div>
+      </div>
+      <div class="post-item">
+        <div class="post-thumb">9:16</div>
+        <div class="post-info">
+          <h3>保湿してるのにテカってた理由</h3>
+          <div class="meta">2026/03/16 — カルーセル 6枚</div>
+        </div>
+        <div class="post-stats">
+          <span>1,829 再生</span>
+          <span>11 いいね</span>
+          <span>5 保存</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="check">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>投稿が完了しました</h2>
+    <p>TikTok にカルーセルが投稿されました。反映まで数分かかる場合があります。</p>
+    <div class="publish-id" id="publishId">publish_id: 7352841900293...</div>
+    <br>
+    <button class="btn btn-primary" onclick="document.getElementById('successModal').classList.remove('show');">閉じる</button>
+  </div>
+</div>
+
+<script>
+// Tabs
+document.querySelectorAll('.tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// Title counter
+document.getElementById('title').addEventListener('input', function() {
+  document.getElementById('titleCount').textContent = this.value.length;
+});
+
+// Hashtag preview
+document.getElementById('hashtags').addEventListener('input', function() {
+  var tags = this.value.trim().split(/\s+/).filter(Boolean);
+  document.getElementById('tagPreview').innerHTML = tags.map(function(t) {
+    return '<span class="tag">#' + t + '</span>';
+  }).join('');
+});
+
+// Privacy selector
+document.querySelectorAll('.privacy-opt').forEach(function(opt) {
+  opt.addEventListener('click', function() {
+    document.querySelectorAll('.privacy-opt').forEach(function(o) { o.classList.remove('selected'); });
+    opt.classList.add('selected');
+  });
+});
+
+// File upload
+var uploadedFiles = [];
+document.getElementById('uploadArea').addEventListener('click', function() {
+  document.getElementById('fileInput').click();
+});
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  Array.from(e.target.files).forEach(function(file) {
+    if (uploadedFiles.length >= 35) return;
+    uploadedFiles.push(file);
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      var grid = document.getElementById('previewGrid');
+      var div = document.createElement('div');
+      div.className = 'preview-item';
+      div.innerHTML = '<img src="' + ev.target.result + '"><button class="remove" onclick="this.parentElement.remove();">x</button>';
+      grid.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+// AI Generate (demo)
+document.getElementById('aiGenerateBtn').addEventListener('click', function() {
+  document.getElementById('title').value = '保湿してるのにテカってた理由';
+  document.getElementById('titleCount').textContent = '15';
+  document.getElementById('caption').value = '化粧水たっぷり塗ってるのに昼にはテカテカ...\nそれ、保湿の仕方が間違ってるかも。\n\n実は「水分だけ補給」してもダメで\n油分でフタをしないと蒸発して逆にテカる。\n\nこれ知ってから朝の肌が全然違う。';
+  document.getElementById('hashtags').value = 'スキンケア メンズスキンケア テカリ対策 保湿';
+  document.getElementById('hashtags').dispatchEvent(new Event('input'));
+});
+
+// Publish (demo flow)
+document.getElementById('publishBtn').addEventListener('click', function() {
+  var btn = this;
+  btn.disabled = true;
+  btn.textContent = '投稿中...';
+  var progress = document.getElementById('publishProgress');
+  var fill = document.getElementById('progressFill');
+  var status = document.getElementById('publishStatus');
+  progress.style.display = 'block';
+
+  var steps = [
+    { pct: 20, text: '画像をアップロードしています...' },
+    { pct: 50, text: 'GitHub Pages にデプロイ中...' },
+    { pct: 70, text: 'デプロイ完了 — TikTok API に送信中...' },
+    { pct: 90, text: 'Content Posting API レスポンス待ち...' },
+    { pct: 100, text: '投稿完了!' },
+  ];
+
+  var i = 0;
+  function nextStep() {
+    if (i >= steps.length) {
+      setTimeout(function() {
+        progress.style.display = 'none';
+        fill.style.width = '0%';
+        btn.disabled = false;
+        btn.textContent = 'TikTok に投稿';
+        document.getElementById('publishId').textContent =
+          'publish_id: ' + Math.random().toString(36).substr(2, 16);
+        document.getElementById('successModal').classList.add('show');
+      }, 500);
+      return;
+    }
+    fill.style.width = steps[i].pct + '%';
+    status.textContent = steps[i].text;
+    i++;
+    setTimeout(nextStep, 1200);
+  }
+  nextStep();
+});
+</script>
+
+</body>
+</html>

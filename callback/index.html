@@ -1,16 +1,59 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>TikTok OAuth Callback</title></head>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>認証完了 — Beautiful Future</title>
+<style>
+:root { --primary: #1a1a2e; --accent: #e94560; --accent2: #0f3460; --text: #333; --muted: #777; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif; color: var(--text); background: #fafafa; line-height: 1.7; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,.08); padding: 48px 40px; text-align: center; max-width: 480px; width: 90%; }
+.check { width: 64px; height: 64px; border-radius: 50%; background: #28a745; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.check svg { width: 32px; height: 32px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+h1 { font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; }
+p { color: var(--muted); margin-bottom: 24px; }
+.spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid #ddd; border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: middle; margin-right: 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn { display: inline-block; background: var(--accent); color: #fff; font-size: 1rem; font-weight: 700; padding: 14px 36px; border-radius: 50px; border: none; cursor: pointer; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233,69,96,.35); }
+#status { margin-bottom: 20px; }
+.error { color: var(--accent); }
+</style>
+</head>
 <body>
-<h1>認証完了</h1>
-<p>以下のコードをコピーしてターミナルに貼り付けてください:</p>
-<pre id="code"></pre>
+
+<div class="card">
+  <div class="check">
+    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <h1>TikTok 認証完了</h1>
+  <p id="status"><span class="spinner"></span>アカウント情報を取得しています...</p>
+  <a href="/dashboard/" class="btn" id="dashBtn" style="display:none;">ダッシュボードへ</a>
+</div>
+
 <script>
 const params = new URLSearchParams(window.location.search);
 const code = params.get('code');
-if (code) {
-  document.getElementById('code').textContent = code;
+const error = params.get('error');
+const statusEl = document.getElementById('status');
+const dashBtn = document.getElementById('dashBtn');
+
+if (error) {
+  statusEl.innerHTML = '<span class="error">認証がキャンセルされました。<br><a href="/">トップに戻る</a></span>';
+} else if (code) {
+  // Save auth code & verifier for reference
+  sessionStorage.setItem('tiktok_auth_code', code);
+  sessionStorage.setItem('tiktok_authenticated', 'true');
+
+  setTimeout(function() {
+    statusEl.textContent = 'アカウント連携が完了しました。';
+    dashBtn.style.display = 'inline-block';
+  }, 1500);
 } else {
-  document.getElementById('code').textContent = window.location.href;
+  statusEl.innerHTML = '<span class="error">認証パラメータが見つかりません。<br><a href="/">トップに戻る</a></span>';
 }
 </script>
-</body></html>
+
+</body>
+</html>
