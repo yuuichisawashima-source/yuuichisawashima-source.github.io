@@ -1,1 +1,253 @@
-# TTO Media
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beautiful Future — スキンケア特化 TikTok コンテンツ管理</title>
+<style>
+:root {
+  --primary: #1a1a2e;
+  --accent: #e94560;
+  --accent2: #0f3460;
+  --bg: #fafafa;
+  --card: #fff;
+  --text: #333;
+  --muted: #777;
+  --radius: 12px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
+a { color: var(--accent2); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
+  color: #fff;
+  text-align: center;
+  padding: 80px 24px 60px;
+}
+.hero h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: .02em; }
+.hero .tagline { margin-top: 16px; font-size: 1.15rem; opacity: .9; }
+
+/* Container */
+.container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+/* Section */
+section { padding: 56px 0; }
+section h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; color: var(--primary); border-left: 4px solid var(--accent); padding-left: 12px; }
+
+/* Features */
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.feature-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.feature-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--accent2); }
+.feature-card p { font-size: .95rem; color: var(--muted); }
+
+/* Flow */
+.flow-steps { counter-reset: step; list-style: none; }
+.flow-steps li {
+  counter-increment: step;
+  padding: 16px 0 16px 56px;
+  position: relative;
+  border-left: 2px solid #ddd;
+  margin-left: 20px;
+}
+.flow-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: -16px;
+  top: 14px;
+  width: 32px; height: 32px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: .9rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.flow-steps li:last-child { border-left-color: transparent; }
+.flow-steps li strong { display: block; font-size: 1rem; }
+.flow-steps li span { font-size: .9rem; color: var(--muted); }
+
+/* Legal */
+.legal { background: #f2f2f2; }
+.legal-content { font-size: .9rem; color: var(--muted); line-height: 1.9; }
+.legal-content h3 { color: var(--text); font-size: 1rem; margin: 20px 0 8px; }
+.legal-content ul { padding-left: 1.5em; margin: 8px 0; }
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 32px 24px;
+  font-size: .85rem;
+  color: var(--muted);
+  border-top: 1px solid #e0e0e0;
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="container">
+    <h1>Beautiful Future</h1>
+    <p class="tagline">スキンケア特化 TikTok コンテンツ管理プラットフォーム</p>
+  </div>
+</div>
+
+<!-- About -->
+<section id="about">
+  <div class="container">
+    <h2>サービス概要</h2>
+    <p>Beautiful Future は、スキンケア領域に特化した TikTok コンテンツの企画・制作・投稿・分析を一元管理するプラットフォームです。AI を活用してカルーセル（写真モード）や動画コンテンツを効率的に制作し、TikTok Content Posting API を通じて投稿します。</p>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" style="background:#f7f7fa;">
+  <div class="container">
+    <h2>主な機能</h2>
+    <div class="features">
+      <div class="feature-card">
+        <h3>AI コンテンツ生成</h3>
+        <p>スキンケアに関するトレンド分析をもとに、フック・本文・ハッシュタグを AI が自動生成。カルーセル画像も自動レイアウトします。</p>
+      </div>
+      <div class="feature-card">
+        <h3>TikTok 自動投稿</h3>
+        <p>TikTok Content Posting API と連携し、カルーセル（写真モード）および動画をアプリから直接投稿。プライバシー設定も柔軟に管理できます。</p>
+      </div>
+      <div class="feature-card">
+        <h3>パフォーマンス分析</h3>
+        <p>再生数・いいね・保存率・フォロワー増減を自動取得し、投稿ごとのパフォーマンスを可視化。次の施策に活かします。</p>
+      </div>
+      <div class="feature-card">
+        <h3>マルチアカウント管理</h3>
+        <p>複数の TikTok アカウントを一元管理。アカウントごとにペルソナ・テーマ・カラースキームを設定し、統一感のある運用が可能です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section id="flow">
+  <div class="container">
+    <h2>利用の流れ</h2>
+    <ol class="flow-steps">
+      <li>
+        <strong>TikTok アカウント連携</strong>
+        <span>OAuth 2.0 認証でお使いの TikTok アカウントを安全に連携します。投稿権限のみを取得し、パスワードは保存しません。</span>
+      </li>
+      <li>
+        <strong>コンテンツ企画・生成</strong>
+        <span>トレンド分析に基づき、AI がスキンケアに特化したカルーセルや動画コンテンツを自動生成します。</span>
+      </li>
+      <li>
+        <strong>レビュー・編集</strong>
+        <span>生成されたコンテンツを確認・編集。テキスト、画像、ハッシュタグを自由にカスタマイズできます。</span>
+      </li>
+      <li>
+        <strong>TikTok へ投稿</strong>
+        <span>Content Posting API を通じて TikTok に直接投稿。公開範囲（全員公開 / フォロワーのみ / 非公開）を選択できます。</span>
+      </li>
+      <li>
+        <strong>分析・改善</strong>
+        <span>投稿後のパフォーマンスデータを自動収集し、次のコンテンツ改善に活用します。</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- TikTok Integration -->
+<section id="integration" style="background:#f7f7fa;">
+  <div class="container">
+    <h2>TikTok API 連携について</h2>
+    <p>本サービスは TikTok の公式 Content Posting API を使用しています。ユーザーの明示的な許可（OAuth 2.0 認証）を得た上で、以下のスコープのみを利用します：</p>
+    <ul style="margin:16px 0 0 1.5em; color: var(--muted);">
+      <li><code>user.info.profile</code> — プロフィール情報の取得</li>
+      <li><code>user.info.stats</code> — フォロワー数等の統計情報</li>
+      <li><code>video.list</code> — 投稿一覧・メトリクスの取得</li>
+      <li><code>video.publish</code> — コンテンツの投稿</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Privacy Policy -->
+<section id="privacy" class="legal">
+  <div class="container">
+    <h2>プライバシーポリシー</h2>
+    <div class="legal-content">
+      <p>Beautiful Future（以下「本サービス」）は、ユーザーの個人情報の保護を重視しています。</p>
+
+      <h3>1. 収集する情報</h3>
+      <ul>
+        <li>TikTok OAuth 認証を通じて取得するアクセストークン・リフレッシュトークン</li>
+        <li>TikTok プロフィール情報（ユーザーID、表示名）</li>
+        <li>投稿のパフォーマンスデータ（再生数、いいね数、保存数等）</li>
+      </ul>
+
+      <h3>2. 情報の利用目的</h3>
+      <ul>
+        <li>TikTok へのコンテンツ投稿機能の提供</li>
+        <li>投稿パフォーマンスの分析・レポート作成</li>
+        <li>サービスの改善・新機能の開発</li>
+      </ul>
+
+      <h3>3. 情報の保管・保護</h3>
+      <p>認証トークンはユーザーのローカル環境に暗号化して保存されます。第三者のサーバーに送信・保管されることはありません。</p>
+
+      <h3>4. 第三者への提供</h3>
+      <p>ユーザーの個人情報を第三者に販売・貸与・開示することはありません。法令に基づく開示要求がある場合を除きます。</p>
+
+      <h3>5. データの削除</h3>
+      <p>ユーザーはいつでも TikTok アカウントの連携を解除し、保存されたデータの削除を要求できます。連携解除は TikTok の設定画面からも実行可能です。</p>
+
+      <h3>6. お問い合わせ</h3>
+      <p>プライバシーに関するお問い合わせは <a href="mailto:privacy@beautifulfuture10.site">privacy@beautifulfuture10.site</a> までご連絡ください。</p>
+
+      <p style="margin-top:16px;"><em>最終更新日: 2026年3月20日</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- Terms of Service -->
+<section id="terms">
+  <div class="container">
+    <h2>利用規約</h2>
+    <div class="legal-content">
+      <h3>1. サービスの内容</h3>
+      <p>本サービスは、TikTok Content Posting API を利用したスキンケアコンテンツの制作・投稿・分析支援ツールです。</p>
+
+      <h3>2. アカウント連携</h3>
+      <p>本サービスの利用にあたり、TikTok アカウントの OAuth 認証による連携が必要です。ユーザーは自身のアカウント情報の管理に責任を持つものとします。</p>
+
+      <h3>3. 投稿コンテンツ</h3>
+      <p>本サービスを通じて投稿されるコンテンツの内容について、ユーザーが最終的な責任を負うものとします。TikTok のコミュニティガイドラインおよび利用規約を遵守してください。</p>
+
+      <h3>4. 免責事項</h3>
+      <p>本サービスは「現状のまま」提供されます。TikTok API の仕様変更・障害等に起因するサービスの中断について、一切の責任を負いません。</p>
+
+      <h3>5. 変更</h3>
+      <p>本規約は予告なく変更される場合があります。重要な変更がある場合はサービス内で通知します。</p>
+
+      <p style="margin-top:16px;"><em>最終更新日: 2026年3月20日</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Beautiful Future. All rights reserved.</p>
+    <p style="margin-top:8px;">
+      <a href="#privacy">プライバシーポリシー</a> ・ <a href="#terms">利用規約</a> ・ <a href="mailto:privacy@beautifulfuture10.site">お問い合わせ</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
